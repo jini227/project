@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface BoardMapper {
 
-    // 페이징
-    int searchLostCount(BoardDto boardDto);
-
     // 게시물 리스트 조회
     List<BoardDto> getBoardList(BoardDto boardDto);
+
+    // 페이징
+    int getTotalListCount(BoardDto boardDto);
 
     // 게시물 등록
     int insertBoard(BoardDto boardDto);

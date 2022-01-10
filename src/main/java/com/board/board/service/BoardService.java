@@ -14,7 +14,10 @@ import java.util.List;
 public interface BoardService {
 
     // 리스트페이지 호출
-    public List<BoardDto> getBoardList(SearchCriteriaMainBoard cri, BoardDto boardDto);
+    public List<BoardDto> getBoardList(BoardDto boardDto);
+
+    // 페이징을 위한 게시물 총 갯수 구하기
+    int getTotalListCount(BoardDto boardDto);
 
     // 게시물 등록
     public void registBoard(String contentsType, BoardDto boardDto, HttpSession session, MultipartHttpServletRequest request);
@@ -48,5 +51,4 @@ public interface BoardService {
 
     // 상세페이지 - 댓글 삭제
     void deleteComment(int seq);
-
 }

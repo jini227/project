@@ -44,24 +44,11 @@
     </div>
     <span class="wrapBoardsearchlist">
         <%--검색 ajax 실행 후 결과 내용 출력 란--%>
-
-        <div class="paging">
-            <ul>
-                <c:if test="${pageMaker.prev}">
-                    <li><a href="${pageMaker.makeQuery(pageMaker.startPage - 1)}">이전</a></li>
-                </c:if>
-
-                <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-                    <li><a href="${pageMaker.makeQuery(idx)}">${idx}</a></li>
-                </c:forEach>
-
-                <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-                    <li><a href="${pageMaker.makeQuery(pageMaker.endPage + 1)}">다음</a></li>
-                </c:if>
-            </ul>
-        </div>
-
     </span>
+
+    <ul id="pagingul">
+        <%-- 페이징 영역 --%>
+    </ul>
 </div>
 
 <button class="jellybutton topbtn" type="button" onclick="goTop()">TOP</button>
@@ -87,22 +74,37 @@
 </c:if>
 <script language="javascript">
 
-    $(function () {
+    $(document).ready(function () {
         search();
     });
 
+    // 첫 진입 시 결과란 보이지 x -> 기본값 false 세팅
+    // 검색 후 페이지 이동 시에도 결과란 유지 되도록 함수 밖으로 뺌
+    var resultOn = false;
+
     function search(active) {
+        var searchKeyword = $("#searchkeyword").val(); // 검색어
+        var searchOption = $("#search").val(); // 제목/작성자/이름
+        var contentsType = $("#contentsType").val(); // lost/find
+        var state = $("[name=state]:checked").val(); // 발견상태
+        var currentPage = 1; // 현재 페이지
+        var dataPerPage = 3 //한 페이지에 나타낼 글 수
+
+        // 엔터 시 input 공란일 경우 alert -> return false
         if (active == 'enter') {
             if ($("#searchkeyword").val() == '') {
                 alert('내용을 입력 해 주세요.');
                 return false;
             }
         }
-        var resultActice = active;
-        var searchKeyword = $("#searchkeyword").val(); // 검색어
-        var searchOption = $("#search").val(); // 제목/작성자/이름
-        var contentsType = $("#contentsType").val(); // lost/find
-        var state = $("[name=state]:checked").val(); // 발견상태
+
+        if (active == 'active' || active == 'enter') {
+            // 엔터나 검색 버튼 클릭을 통한 진입 시 resultOn true -> 검색 결과란 노출 되도록 함
+            resultOn = true;
+        } else if (active != 'active' && active != 'enter' && active != null) {
+            // 첫 진입 시 페이지영역 클릭 -> 페이지 번호 세팅 및 검색 결과란 노출 되지 않도록 resultOn false 상태 유지 함
+            currentPage = active;
+        }
 
         // 체크박스 전체 미체크 시 체크 되도록 변경
         if ($("[name=state]:checked").val() == null) {
@@ -117,21 +119,22 @@
                 "contents_type": contentsType,
                 "searchKeyword": searchKeyword,
                 "searchOption": searchOption,
-                "state": state
+                "state": state,
+                "currentPage": currentPage,
+                "dataPerPage": dataPerPage
             },
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             dataType: "json",
             success: function (posts) {
-                console.log(posts)
                 var output = '<span class="search-result">';
-                output += "<p>" + "검색결과 [" + posts.length + "] 개 입니다. ( ";
+                output += "<p>" + "검색결과 [" + '<span class="totalCount">' + posts.length + "</span>" + "] 개 입니다. ( ";
                 if (searchOption == 'title') {
                     output += "검색조건 : 제목";
                 }
                 if (searchOption == 'name') {
                     output += "검색조건 : 이름";
                 }
-                if (searchOption == 'write') {
+                if (searchOption == 'writer') {
                     output += "검색조건 : 작성자";
                 }
                 output += "  |  검색어 : " + searchKeyword + "  |  ";
@@ -150,6 +153,14 @@
                 output += "<ul>";
                 if (posts.length != 0) {
                     for (var i in posts) {
+                        var row = 3; // 한 줄에 나올 게시물 수
+                        var startDiv;
+                        var endDiv;
+                        if (i == 0 || i % row == 0) {
+                            startDiv = i
+                            endDiv = (startDiv*1) + (row*1) -1;
+                            output += "<div>"
+                        }
                         output += "<li>" + "<a href='/board/boardDetail/" + posts[i].seq + "'>";
                         output += "<div class='post-photo-top'>";
                         output += "<div class='img_box'>";
@@ -182,20 +193,23 @@
                         output += "<p>" + "종류 : " + posts[i].pet_type + "</P>";
                         output += "</div>";
                         output += "</a>" + "</li>";
+                        if (i != 0 && i == endDiv) {
+                            output += "</div>";
+                        }
                     }
                 } else {
                     output += "<li>" + "게시물이 없습니다." + "</li>";
                 }
                 output += "</ul>";
                 output += "</div>";
-                output += '<div class="paging">' + "<ul>";
-                output += "페이징 영역 입니다.";
-                output += "</ul>" + "</div>";
                 $(".wrapBoardsearchlist").html(output);
-                if (resultActice != null) { // 검색버튼 클릭 시에만 결과 보이도록 세팅
+                // 검색버튼 클릭 시에만 결과 보이도록 세팅
+                if (resultOn) {
                     var resultCount = document.querySelector('.search-result');
                     resultCount.classList.toggle('active');
                 }
+                paging(contentsType, searchKeyword, searchOption, state, currentPage, dataPerPage);
+
             },
             error: function () {
                 var msg = "ajax 통신 실패";
@@ -204,6 +218,84 @@
         });
     }
 
+    function paging(contentsType, searchKeyword, searchOption, state, v_currentPage, v_dataPerPage) {
+
+        $.ajax({
+            type: "POST",
+            url: "paging",
+            data: {
+                "contents_type": contentsType,
+                "searchKeyword": searchKeyword,
+                "searchOption": searchOption,
+                "state": state
+            },
+            success: function (result) {
+                // 검색결과 총 갯수 세팅
+                $(".totalCount").text(result);
+
+                var totalData = result; //총 데이터 수 : ajax
+                var currentPage = v_currentPage; //현재 페이지
+                var dataPerPage = v_dataPerPage; //한 페이지에 나타낼 글 수
+                var pageCount = 10; //페이징에 나타낼 페이지 수
+
+                var totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
+
+                if (totalPage < pageCount) { //총 페이지 수가 페이징에 나타낼 페이지 수 보다 작다면
+                    pageCount = totalPage;
+                }
+
+                var pageGroup = Math.ceil(currentPage / pageCount); // 페이지 그룹
+                var last = pageGroup * pageCount; //화면에 보여질 마지막 페이지 번호
+
+                if (last > totalPage) {
+                    last = totalPage;
+                }
+
+                var first = last - (pageCount - 1); //화면에 보여질 첫번째 페이지 번호
+                var next = last + 1;
+                var prev = first - 1;
+
+                var pageHtml = "";
+
+                if (prev > 0) {
+                    pageHtml += "<li><a href='#' id='prev'> 이전 </a></li>";
+                }
+
+                //페이징 번호 표시
+                for (var i = first; i <= last; i++) {
+                    if (currentPage == i) {
+                        pageHtml += "<li class='on'><a href='#' id='" + i + "'>" + i + "</a></li>";
+                    } else {
+                        pageHtml += "<li><a href='#' id='" + i + "'>" + i + "</a></li>";
+                    }
+                }
+
+                if (last < totalPage) {
+                    pageHtml += "<li><a href='#' id='next'> 다음 </a></li>";
+                }
+                $("#pagingul").html(pageHtml);
+
+                //페이징 번호 클릭 이벤트
+                $("#pagingul li a").click(function () {
+                    var $id = $(this).attr("id");
+                    var selectedPage = $(this).text();
+
+                    if ($id == "next") selectedPage = next;
+                    if ($id == "prev") selectedPage = prev;
+
+                    //전역변수에 선택한 페이지 번호를 담는다.
+                    currentPage = selectedPage;
+
+                    // 페이지 클릭을 통한 리스트 재호출
+                    search(currentPage);
+                });
+            },
+            error: function () {
+                var msg = "ajax 통신 실패";
+                alert(msg);
+            }
+        });
+    }
 
     ///////////////////////////////////////////////////////////
 

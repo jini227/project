@@ -21,7 +21,7 @@
     <div class="signUpInner">
         <h3 class="signUpTitle">회원가입</h3>
         <div class="signUpBox">
-            <form:form commandName="signUpDto" class="signUpCommand">
+            <form:form commandName="signUpDto" class="signUpCommand" onsubmit="return signUpChk()">
                 <div class="signUpCommandWrap">
                     <div class="signUpCommandTitle">
                         <p><strong>*</strong> 아이디</p>
@@ -76,7 +76,7 @@
 
                 </div>
                 <div class="signUpBoxbtn">
-                    <input type="button" value="회원가입" onclick="signUpChk();">
+                    <input type="submit" value="회원가입" >
                 </div>
             </form:form>
         </div>
@@ -141,7 +141,8 @@
             alert("필수사항(개인정보 동의)을 체크해주세요");
             return false;
         }
-        document.querySelector('.signUpCommand').submit();
+        //document.querySelector('.signUpCommand').submit();
+        return true;
     }
 
 

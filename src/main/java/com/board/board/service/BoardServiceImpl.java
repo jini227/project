@@ -9,6 +9,9 @@ import com.common.utils.AES256Util;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -29,16 +32,37 @@ public class BoardServiceImpl implements BoardService {
     private Dao dao;
 
     @Override
-    public List<BoardDto> getBoardList(SearchCriteriaMainBoard cri, BoardDto boardDto) {
+    public List<BoardDto> getBoardList(BoardDto boardDto) {
 
-        boardDto.setRowStart(cri.getRowStart());
-        boardDto.setRowEnd(cri.getRowEnd());
+        // 현재 페이지
+        int currentPage = 1;
+        // 검색 혹은 초기 진입 시 currentPage 값이 0 이기 때문에 초기 진입시를 제외 하고 세팅
+        if (boardDto.getCurrentPage() != 0) {
+            currentPage = boardDto.getCurrentPage();
+        }
+        // 한 페이지 당 표시 될 게시물 갯수 - search()에서 설정 된 값
+        int perPageNum = boardDto.getDataPerPage();
+        int rowStart = ((currentPage - 1) * perPageNum) + 1;
+        int rowEnd = rowStart + perPageNum - 1;
 
+        boardDto.setRowStart(rowStart);
+        boardDto.setRowEnd(rowEnd);
+
+        // 현재 페이지에 보여질 데이터
         List<BoardDto> posts = dao.getBoardList(boardDto);
 
         return posts;
     }
 
+    @Override
+    public int getTotalListCount(BoardDto boardDto) {
+
+        int result = dao.getTotalListCount(boardDto);
+
+        return result;
+    }
+
+    @Transactional
     @Override
     public void registBoard(String contentsType, BoardDto boardDto, HttpSession session, MultipartHttpServletRequest request) {
 
@@ -94,7 +118,6 @@ public class BoardServiceImpl implements BoardService {
 
                 if (thumb == 0) {
                     String thumbnailName = createThumbnail(filePath, storedFileName);
-                    boardDto.setSeq(boardSeq);
                     boardDto.setThumbnail_file_name(thumbnailName);
                     dao.updateThumnailFile(boardDto);
                     System.out.println("[LOG] 썸네일 DB 등록 완료");
@@ -103,7 +126,8 @@ public class BoardServiceImpl implements BoardService {
             }
             System.out.println("[LOG] 첨부파일 DB 등록 완료");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("[ERROR] " + e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
     }
 

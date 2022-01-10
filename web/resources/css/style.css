@@ -79,6 +79,36 @@ ul, li {list-style: none;}
     text-decoration: underline;
 }
 
+#pagingul {
+    text-align: center;
+    display: inline-block;
+    /*border: 1px solid #ccc;*/
+    border-right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#pagingul li {
+    text-align: center;
+    float: left;
+}
+
+#pagingul li a {
+    display: block;
+    font-size: 14px;
+    padding: 9px 12px;
+    border-right: solid 1px #ccc;
+    box-sizing: border-box;
+}
+
+#pagingul li.on {
+    background: #eda712;
+}
+
+#pagingul li.on a {
+    color: #fff;
+}
+
 
 
 
@@ -1030,9 +1060,14 @@ label.right {
 .wrapBoardlist ul {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    width: 60%;
     padding: 15px 0px 10px 0px;
+    flex-direction: column;
+}
+
+.wrapBoardlist ul div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .wrapBoardlist ul li {

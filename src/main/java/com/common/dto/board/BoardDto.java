@@ -35,10 +35,11 @@ public class BoardDto {
     private String keyword;
     private int rowStart;
     private int rowEnd;
-    private boolean isPrev;
-    private boolean isNext;
     private int startPage;
     private int endPage;
+
+    private int currentPage;
+    private int dataPerPage;
 
     private MultipartFile[] img;
     private List<BoardImgDto> images;
@@ -269,22 +270,6 @@ public class BoardDto {
         this.rowEnd = rowEnd;
     }
 
-    public boolean isPrev() {
-        return isPrev;
-    }
-
-    public void setPrev(boolean prev) {
-        isPrev = prev;
-    }
-
-    public boolean isNext() {
-        return isNext;
-    }
-
-    public void setNext(boolean next) {
-        isNext = next;
-    }
-
     public int getStartPage() {
         return startPage;
     }
@@ -299,6 +284,22 @@ public class BoardDto {
 
     public void setEndPage(int endPage) {
         this.endPage = endPage;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getDataPerPage() {
+        return dataPerPage;
+    }
+
+    public void setDataPerPage(int dataPerPage) {
+        this.dataPerPage = dataPerPage;
     }
 
     public MultipartFile[] getImg() {

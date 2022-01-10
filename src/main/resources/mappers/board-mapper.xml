@@ -36,7 +36,7 @@
                     board b JOIN member m
                     on b.member_seq = m.seq
                 WHERE
-                    contents_type = #{contents_type}
+                    b.contents_type = #{contents_type}
                     <if test="searchKeyword !='' and searchKeyword !=null and searchOption == 'title'">
                         AND b.title like '%' ||  #{searchKeyword} || '%'
                     </if>
@@ -52,6 +52,46 @@
             )
         WHERE
             rnum BETWEEN #{rowStart} AND #{rowEnd}
+    </select>
+
+    <select id="getTotalListCount" parameterType="boardDto" resultType="int">
+        SELECT
+            count(seq)
+        FROM
+            (
+            SELECT
+            b.seq,
+            b.title,
+            m.id as writer,
+            b.pet_name,
+            b.pet_location,
+            b.pet_time,
+            b.pet_type,
+            b.pet_meet,
+            b.thumbnail_file_name,
+            ROW_NUMBER()
+            OVER(
+            ORDER BY
+            b.seq DESC
+            ) AS rnum
+            FROM
+            board b JOIN member m
+            on b.member_seq = m.seq
+            WHERE
+            b.contents_type = #{contents_type}
+            <if test="searchKeyword !='' and searchKeyword !=null and searchOption == 'title'">
+                AND b.title like '%' ||  #{searchKeyword} || '%'
+            </if>
+            <if test="searchKeyword !='' and searchKeyword !=null and searchOption == 'name'">
+                AND b.pet_name like '%' ||  #{searchKeyword} || '%'
+            </if>
+            <if test="searchKeyword !='' and searchKeyword !=null and searchOption == 'writer'">
+                AND m.id = #{searchKeyword}
+            </if>
+            <if test="state !='' and state !=null and state != 2">
+                AND b.pet_meet = #{state}
+            </if>
+            )
     </select>
 
     <insert id="insertBoard" parameterType="boardDto">

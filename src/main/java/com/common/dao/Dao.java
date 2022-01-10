@@ -65,6 +65,14 @@ public class Dao {
         return mapper.getBoardList(boardDto);
     }
 
+    // 페이징을 위한 게시물 총 갯수 구하기
+    public int getTotalListCount(BoardDto boardDto) {
+        BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
+        int result = mapper.getTotalListCount(boardDto);
+
+        return result;
+    }
+
     // 게시물 등록
     public int registBoard(BoardDto boardDto) {
         BoardMapper mapper = sqlSession.getMapper(BoardMapper.class);
@@ -190,5 +198,6 @@ public class Dao {
         MyPageMapper mapper = sqlSession.getMapper(MyPageMapper.class);
         mapper.updateMyInfo(memberDto);
     }
+
 
 }

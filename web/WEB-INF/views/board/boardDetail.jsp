@@ -231,7 +231,6 @@
         function meetToggle() {
             var state = $(".finishText").text();
             if (state != '발견완료') {
-                console.log('log. state is not found.')
                 reviewContents.classList.toggle('active');
                 reviewBtnToggle.classList.toggle('active');
             }
