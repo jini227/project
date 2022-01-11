@@ -28,9 +28,27 @@
             <div class="titleLine"></div>
         </div>
         <div id="contentsMenu">
-            <span>전체 <input type="checkbox" class="AllOkay" name="state" value="2" checked></span>
-            <span>미발견 <input type="checkbox" class="okay" name="state" value="0" checked></span>
-            <span>발견완료 <input type="checkbox" class="okay" name="state" value="1" checked></span> |
+            <span>
+                <label class="checkbox stateCheckbox" for="state2">
+                    <input type="checkbox" class="AllOkay" name="state" value="2" id="state2" checked>
+                    <span class="icon"></span>
+                    <span class="text" style="margin: 0;">전체</span>
+                </label>
+            </span>
+            <span>
+                <label class="checkbox stateCheckbox" for="state0">
+                    <input type="checkbox" class="okay" name="state" value="0" id="state0" checked>
+                    <span class="icon"></span>
+                    <span class="text" style="margin: 0;">미발견</span>
+                </label>
+            </span>
+            <span>
+                <label class="checkbox stateCheckbox" for="state1">
+                    <input type="checkbox" class="okay" name="state" value="1" id="state1" checked>
+                    <span class="icon"></span>
+                    <span class="text" style="margin: 0;">발견완료</span>
+                </label>
+            </span>
             <select name="search" id="search">
                 <option value="title">제목</option>
                 <option value="writer">작성자</option>
@@ -79,7 +97,7 @@
     });
 
     // 첫 진입 시 결과란 보이지 x -> 기본값 false 세팅
-    // 검색 후 페이지 이동 시에도 결과란 유지 되도록 함수 밖으로 뺌
+    // 검색 후 페이지 이동 시에도 결과란 유지 되도록 search() 밖으로 뺌
     var resultOn = false;
 
     function search(active) {
@@ -88,7 +106,7 @@
         var contentsType = $("#contentsType").val(); // lost/find
         var state = $("[name=state]:checked").val(); // 발견상태
         var currentPage = 1; // 현재 페이지
-        var dataPerPage = 3 //한 페이지에 나타낼 글 수
+        var dataPerPage = 6; //한 페이지에 나타낼 글 수
 
         // 엔터 시 input 공란일 경우 alert -> return false
         if (active == 'enter') {
@@ -158,7 +176,7 @@
                         var endDiv;
                         if (i == 0 || i % row == 0) {
                             startDiv = i
-                            endDiv = (startDiv*1) + (row*1) -1;
+                            endDiv = (startDiv * 1) + (row * 1) - 1;
                             output += "<div>"
                         }
                         output += "<li>" + "<a href='/board/boardDetail/" + posts[i].seq + "'>";
@@ -209,7 +227,6 @@
                     resultCount.classList.toggle('active');
                 }
                 paging(contentsType, searchKeyword, searchOption, state, currentPage, dataPerPage);
-
             },
             error: function () {
                 var msg = "ajax 통신 실패";
@@ -230,13 +247,14 @@
                 "state": state
             },
             success: function (result) {
+                console.log('총 게시물 : ' + result + '개')
                 // 검색결과 총 갯수 세팅
                 $(".totalCount").text(result);
 
                 var totalData = result; //총 데이터 수 : ajax
                 var currentPage = v_currentPage; //현재 페이지
                 var dataPerPage = v_dataPerPage; //한 페이지에 나타낼 글 수
-                var pageCount = 10; //페이징에 나타낼 페이지 수
+                var pageCount = 3; //페이징에 나타낼 페이지 수
 
                 var totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
 
@@ -252,13 +270,13 @@
                 }
 
                 var first = last - (pageCount - 1); //화면에 보여질 첫번째 페이지 번호
-                var next = last + 1;
-                var prev = first - 1;
+                var next = last + 1; // 다음 버튼 클릭 시 페이징영역의 마지막 페이지 +1
+                var prev = first - 1; // 이전 버튼 클릭 시 페이징영역의 첫번째 페이지 -1
 
                 var pageHtml = "";
 
                 if (prev > 0) {
-                    pageHtml += "<li><a href='#' id='prev'> 이전 </a></li>";
+                    pageHtml += "<li><a href='#' id='prev'> << </a></li>";
                 }
 
                 //페이징 번호 표시
@@ -271,7 +289,7 @@
                 }
 
                 if (last < totalPage) {
-                    pageHtml += "<li><a href='#' id='next'> 다음 </a></li>";
+                    pageHtml += "<li><a href='#' id='next'> >> </a></li>";
                 }
                 $("#pagingul").html(pageHtml);
 
@@ -283,11 +301,8 @@
                     if ($id == "next") selectedPage = next;
                     if ($id == "prev") selectedPage = prev;
 
-                    //전역변수에 선택한 페이지 번호를 담는다.
-                    currentPage = selectedPage;
-
                     // 페이지 클릭을 통한 리스트 재호출
-                    search(currentPage);
+                    search(selectedPage);
                 });
             },
             error: function () {

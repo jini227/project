@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+/out/
+/target/
+/.idea/
+/web/resources/imgUpload/
+/Board.iml
+/lib/

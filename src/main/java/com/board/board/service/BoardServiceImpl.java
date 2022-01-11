@@ -41,9 +41,9 @@ public class BoardServiceImpl implements BoardService {
             currentPage = boardDto.getCurrentPage();
         }
         // 한 페이지 당 표시 될 게시물 갯수 - search()에서 설정 된 값
-        int perPageNum = boardDto.getDataPerPage();
-        int rowStart = ((currentPage - 1) * perPageNum) + 1;
-        int rowEnd = rowStart + perPageNum - 1;
+        int dataPerPage = boardDto.getDataPerPage();
+        int rowStart = ((currentPage - 1) * dataPerPage) + 1;
+        int rowEnd = rowStart + dataPerPage - 1;
 
         boardDto.setRowStart(rowStart);
         boardDto.setRowEnd(rowEnd);

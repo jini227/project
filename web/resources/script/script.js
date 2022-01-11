@@ -77,6 +77,6 @@ if (document.querySelector(".copy-Phone") != null) {
 
 function goTop(){
 	console.log('go top')
-	document.documentElement.scrollTop = 0;
+	$('html, body').scrollTop(0);
 };
 

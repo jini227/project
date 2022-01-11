@@ -86,6 +86,7 @@ ul, li {list-style: none;}
     border-right: 0;
     display: flex;
     justify-content: center;
+    margin-bottom: 30px;
 }
 
 #pagingul li {
@@ -99,6 +100,10 @@ ul, li {list-style: none;}
     padding: 9px 12px;
     border-right: solid 1px #ccc;
     box-sizing: border-box;
+}
+
+#pagingul li a#next {
+    border-right: none;
 }
 
 #pagingul li.on {
@@ -151,7 +156,7 @@ header {
 
 .fa-accusoft { /* 로고 크기/색상 조정 */
     font-size: 25px;
-    color: #fed400;
+    color: #eda712;
 }
 
 .enter p {
@@ -640,6 +645,12 @@ strong {
     animation: jelly 0.6s ease;
 }
 
+.stateCheckbox input:checked ~ .icon {
+    border-color: transparent;
+    background: #eda712;
+    animation: jelly 0.6s ease;
+}
+
 .checkbox input:checked ~ .icon::after {
     opacity: 1;
     transform: rotate(45deg) scale(1);
@@ -673,12 +684,15 @@ strong {
 .mainContentsWrap ul {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
+    flex-wrap: nowrap;
+    width: 70%;
 }
 
 .mainBoard {
+    display: flex;
     padding: 80px 0;
+    flex-direction: column;
+    align-items: center;
 }
 
 .mainLost {
@@ -716,14 +730,16 @@ strong {
 [name="slide"] {display: none;} /* 인풋 안보이게 */
 
 .slidebox {
-    max-width: 2000px;
+    /*max-width: 2000px;*/
     width: 100%;
     margin: 0 auto;
 }
 
 .slidebox img {
-    max-width: 100%;
+    /*max-width: 100%;*/
+    width: 100%;
     cursor: pointer;
+    border-bottom: 1px solid silver;
 }
 
 .slidebox, .slidelist {
@@ -766,10 +782,10 @@ label.right {
     background-repeat: no-repeat;
 }  */
 
-[id="slide01"]:checked ~ .slidelist .slideitem {transform: translateX(0); animation: slide01 10s infinite;}
-[id="slide02"]:checked ~ .slidelist .slideitem {transform: translateX(-100%); animation: slide02 10s infinite;}
-[id="slide03"]:checked ~ .slidelist .slideitem {transform: translateX(-200%); animation: slide03 10s infinite;}
-[id="slide04"]:checked ~ .slidelist .slideitem {transform: translateX(-300%); animation: slide04 10s infinite;}
+[id="slide01"]:checked ~ .slidelist .slideitem {transform: translateX(0); animation: slide01 50s infinite;}
+[id="slide02"]:checked ~ .slidelist .slideitem {transform: translateX(-100%); animation: slide02 50s infinite;}
+[id="slide03"]:checked ~ .slidelist .slideitem {transform: translateX(-200%); animation: slide03 50s infinite;}
+[id="slide04"]:checked ~ .slidelist .slideitem {transform: translateX(-300%); animation: slide04 50s infinite;}
 
 @keyframes slide01 {
     0% {left: 0%;}
@@ -822,8 +838,8 @@ label.right {
 
 /* -- 메인 글 크기, 위치 셋팅 -- */
 .mainContentsWrap ul li {
-    width: 200px;
-    height: 250px;
+    /*width: 200px;
+    height: 250px;*/
     border-radius: 8px;
     overflow: hidden;
 }
@@ -860,9 +876,10 @@ label.right {
 }
 
 .mainContentsWrap ul li button span p {
-    padding: 20px;
+    padding: 0px 10px 20px 10px;
     opacity: 0;
     line-height: 25px; /* 마우스 올렸을때 보이는 내용 글씨 상하 간격 - 내용 많을 시 다시 조정 하기*/
+    font-size: 12px;
 }
 
 .mainContentsWrap ul li button:hover p{

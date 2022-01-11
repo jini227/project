@@ -22,17 +22,6 @@ public class Dao {
     @Autowired
     private SqlSession sqlSession;
 
-
-
-    /* BOARD - MAIN */
-    // 메인페이지 불러오기
-    public MainDto selectMain() {
-        MainMapper mapper = sqlSession.getMapper(MainMapper.class);
-        MainDto mainDto = mapper.selectMain();
-
-        return mainDto;
-    }
-
     /* BOARD - ENTER */
     // 회원 가입
     public void registMember(SignUpDto signUpMemberDto) {
@@ -199,5 +188,15 @@ public class Dao {
         mapper.updateMyInfo(memberDto);
     }
 
+    // 메인페이지 찾아주세요 게시글
+    public List<BoardDto> getMainLosts() {
+        MainMapper mapper = sqlSession.getMapper(MainMapper.class);
+        return mapper.getMainLosts();
+    }
 
+    // 메인페이지 리뷰 글
+    public List<BoardDto> getMainReviews() {
+        MainMapper mapper = sqlSession.getMapper(MainMapper.class);
+        return mapper.getMainReviews();
+    }
 }

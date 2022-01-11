@@ -101,7 +101,7 @@
                                     <c:if test="${p.pet_meet == 1}"><i class="fas fa-stamp" style="color: gray;"></i></c:if>
                                     <c:if test="${p.pet_meet == 0}"><i class="fas fa-stamp" style="color: #ed4848;"></i></c:if>
                                 </p>
-                                <p class="myPostTitle"><a href="<c:url value="/board/boardDetail/${p.seq}"/>">${p.title} (${p.commentNum})<span class="clickText">click</span></a></p>
+                                <p class="myPostTitle"><a href="<c:url value="/board/boardDetail/${p.seq}"/>">${p.title} <c:if test="${p.commentNum != 0}"><span id="lostCommentNum">(${p.commentNum})</span></c:if><span class="clickText">click</span></a></p>
                                 <p>${p.reg_date}</p>
                             </div>
                         </c:forEach>
@@ -128,7 +128,7 @@
                                     <c:if test="${p.pet_meet == 1}"><i class="fas fa-stamp" style="color: gray;"></i></c:if>
                                     <c:if test="${p.pet_meet == 0}"><i class="fas fa-stamp" style="color: #ed4848;"></i></c:if>
                                 </p>
-                                <p class="myPostTitle"><a href="<c:url value="/board/boardDetail/${p.seq}"/>">${p.title} (${p.commentNum})<span class="clickText">click</span></a></p>
+                                <p class="myPostTitle"><a href="<c:url value="/board/boardDetail/${p.seq}"/>">${p.title} <c:if test="${p.commentNum != 0}"><span id="findCommentNum">(${p.commentNum})</span></c:if><span class="clickText">click</span></a></p>
                                 <p>${p.reg_date}</p>
                             </div>
                         </c:forEach>
@@ -148,4 +148,12 @@
 
 <button class="jellybutton topbtn" type="button" onclick="goTop()">TOP</button>
 </body>
+
+<script>
+
+    document.getElementById("lostCommentNum").style = "color : #ed4848;";
+    document.getElementById("findCommentNum").style = "color : #ed4848;";
+
+
+</script>
 </html>

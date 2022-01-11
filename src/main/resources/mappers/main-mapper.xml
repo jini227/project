@@ -3,7 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.common.mapper.main.MainMapper">
-    <select id="selectMain" parameterType="String" resultType="mainDto">
-        select * from member where id='admin1'
+
+    <select id="getMainLosts" resultType="boardDto">
+        <![CDATA[
+            SELECT * FROM BOARD WHERE ROWNUM <= 10 AND CONTENTS_TYPE = 'lost' AND pet_meet = 0
+        ]]>
+    </select>
+
+    <select id="getMainReviews" resultType="boardDto">
+        <![CDATA[
+            SELECT * FROM BOARD WHERE ROWNUM <= 5 AND review IS NOT NULL AND pet_meet = 1
+        ]]>
     </select>
 </mapper>
