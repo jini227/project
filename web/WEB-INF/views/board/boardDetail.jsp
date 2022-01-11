@@ -95,7 +95,8 @@
                 <div class="reviewContents">
                     <p style="white-space: pre-line;">
                         <c:if test="${not empty detail.review}">
-                        <i class="fas fa-quote-left"></i><span class="reviewText">${detail.review}</span><i class="fas fa-quote-right"></i>
+                            <i class="fas fa-quote-left"></i><span class="reviewText">${detail.review}</span><i
+                                class="fas fa-quote-right"></i>
                         </c:if>
                     </p>
                 </div>
@@ -105,9 +106,12 @@
         <div class="wrap-btns">
             <!-- 버튼들 모음 -->
             <!-- 로그인한 사람이 본인 글에 들어왔을때만 보이는 버튼들 추가 -->
-            <button class="btn btn-swap" name="toList" id="toList" onclick="location='<c:url value="/board/boardList/${detail.contents_type}"/>'">LIST<span>목록으로 >></span></button>
+            <button class="btn btn-swap" name="toList" id="toList"
+                    onclick="location='<c:url value="/board/boardList/${detail.contents_type}"/>'">
+                LIST<span>목록으로 >></span></button>
             <c:if test="${memberAuthInfo.id eq detail.writer}">
-                <button class="btn btn-swap" name="delete" id="delete" onclick="del()">DELETE<span>글삭제 >></span></button>
+                <button class="btn btn-swap" name="delete" id="delete" onclick="del()">DELETE<span>글삭제 >></span>
+                </button>
                 <button class="btn btn-swap" name="modify" id="modify"
                         onclick="location='<c:url value="/board/boardModify/${detail.seq}"/>'">MODIFY<span>글수정 >></span>
                 </button>
@@ -116,13 +120,18 @@
         </div>
 
         <div class="review" id="review_area">
-            <form method="POST" action="/board/updateReview/${detail.seq}">
+            <div>
                 <h2>후기를 남겨주세요! 찾은 장소나 위치, 그리고 찾게 된 경로 등을 상세히 적어 주시면 많은 도움이 됩니다.</h2>
-                <input type="hidden" name="boardNum" value="${detail.seq}"/>
-                <textarea name="review" rows="10" cols="30">${detail.review}</textarea>
-                <!-- 					<span id="byteInfo">0</span> / 2000bytes -->
-                <input type="submit" value="작성완료" class="completeBtn">
-            </form>
+                <textarea name="review" rows="10" cols="30" id="reviewContents">${detail.review}</textarea>
+                <span class="reviewBtn">
+                    <a onclick="updateReview('update')" href="#" class="changeInfoBtn"
+                       style="font-size: 13px; top: 0; left: 0;"><span class="clickText">click</span><i
+                            class="fas fa-upload editIcon"></i>등록</a>
+                    <a onclick="updateReview('delete')" href="#" class="changeInfoBtn"
+                       style="font-size: 13px; top: 0; left: 0;"><i class="fas fa-trash-alt editIcon"></i>삭제<span
+                            class="clickText">click</span></a>
+                </span>
+            </div>
         </div>
 
         <div class="wrap-comment">
@@ -213,18 +222,21 @@
                 ! 리뷰 버튼 클릭 시 리뷰 작성 혹은 수정 가능 합니다.
             </p>
         </div>
-        <button class="jellybutton sidebtn7 reviewToggleBtn" name="review" id="review" onclick="window.scrollTo(800,800)">REVIEW
+        <button class="jellybutton sidebtn7 reviewToggleBtn" name="review" id="review"
+                onclick="window.scrollTo(800,800)">REVIEW
         </button>
     </div>
 </c:if>
 
 
 <script>
-    $(document).ready(function () {
 
-        // 리뷰 내용, 리뷰 버튼 변수 세팅
-        var reviewContents = document.querySelector('.reviewContents');
-        var reviewBtnToggle = document.querySelector('.reviewBtnToggle');
+    // 리뷰 내용, 리뷰 버튼 변수 세팅
+    var reviewContents = document.querySelector('.reviewContents');
+    var reviewBtnToggle = document.querySelector('.reviewBtnToggle');
+    var reviewTextarea = document.querySelector('.review');
+
+    $(document).ready(function () {
 
         meetToggle(); // 페이지 첫 진입 시 미발견일 경우만 if문 통해 리뷰내용과 버튼이 안보이도록 세팅
 
@@ -262,7 +274,7 @@
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                        if(result == 1) {
+                        if (result == 1) {
                             var output = "<div>";
                             output += '<p class="finishText">발견완료</p>';
                             output += "</div>";
@@ -311,6 +323,7 @@
                                 selectRlist();
                             } else {
                                 alert("댓글 등록에 실패했습니다.");
+                                return false;
                             }
                         },
                         error: function () {
@@ -320,6 +333,7 @@
                 }
             }
         });
+
         // 댓글 수정
         $("#lostPage-comment-bottom").on("click", ".commentMod", function modifyClick() {
             var div = $("#comment-modify");
@@ -356,6 +370,7 @@
                 cArea.val(con);
             }
         });
+
         $("#lostPage-comment-bottom").on("click", ".commentModFin", function () {
             var memo = $('#modifyContent').val();
             var input = $(this).prev().prev();
@@ -385,6 +400,7 @@
                 }
             });
         });
+
         // 댓글 삭제
         $("#lostPage-comment-bottom").on("click", ".commentDel", function () {
             var chk = confirm("해당 댓글을 정말 삭제하시겠습니까?");
@@ -404,6 +420,7 @@
                 });
             }
         });
+
         // 댓글 목록 조회 함수
         function selectRlist() {
             var boardSeq = "${detail.seq}";
@@ -436,6 +453,69 @@
     });
 
     ///////////////////////////////////////////////////////////
+
+    function updateReview(active) {
+        var chk = true; // 삭제 확인 알람(등록시에는 알람이 없기 때문에 변수 별도로 뺌)
+        var chkRegist = false; // false:수정(default) true:등록
+        var seq = ${detail.seq};
+        var review = $("textarea#reviewContents").val();
+
+        // 후기 등록/수정 후 알람 메시지 구분 하기 위함
+        if ($(".reviewText").text() === '') {
+            chkRegist = true; // 기존 후기란이 공란일 경우 후기 등록으로 메시지 띄움
+        }
+
+        // 삭제 버튼 클릭 시 후기 내용 지우기
+        if (active === 'delete' && $(".reviewText").text() === '') {
+            alert("등록 된 후기가 없습니다.");
+            reviewTextarea.classList.toggle('active');
+            return false;
+        } else if (active === 'delete') {
+            chk = confirm("후기를 삭제 하시겠습니까?");
+            review = '';
+        }
+
+        if (chk) {
+            $.ajax({
+                type: "POST",
+                url: "updateReview",
+                data: {
+                    "seq": seq,
+                    "review": review
+                },
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result === 1) {
+                        // 후기 등록/수정/삭제 성공
+                        if (active === 'delete') {
+                            alert("후기가 삭제 되었습니다.");
+                            $("#reviewContents").val(""); // 후기 작성란 내용 지우기
+                        } else if (chkRegist === false) {
+                            alert("후기가 수정 되었습니다.");
+                        } else if (chkRegist) {
+                            alert("후기가 등록 되었습니다.");
+                        }
+
+                        // 후기 영역 리셋
+                        var output = '<p style="white-space: pre-line;">';
+                        if (active !== 'delete') {
+                            output += '<i class="fas fa-quote-left"></i><span class="reviewText">' + review + '</span><i class="fas fa-quote-right"></i>';
+                        }
+                        output += "</p>";
+                        $(".reviewContents").html(output);
+                        reviewTextarea.classList.toggle('active');
+                    } else {
+                        // 후기 등록/수정/삭제 실패 result === 0
+                        console.log('후기 등록 실패')
+                    }
+                },
+                error: function () {
+                    console.log("ajax 통신 실패");
+                }
+            });
+        }
+    }
 
     // 게시글 삭제
     function del() {

@@ -1348,6 +1348,13 @@ label.right {
     padding: 20px;
 }
 
+.reviewBtn span {
+    cursor: pointer;
+}
+
+.reviewBtn span:hover {
+    color: #f68100;
+}
 
 .review {
     display: none;
@@ -1368,6 +1375,24 @@ label.right {
 }
 
 .review form textarea {
+    width: 70%;
+    height: 300px;
+    margin: 50px 0;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.review div {
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+    padding: 80px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #FDFAF6;
+}
+
+.review div textarea {
     width: 70%;
     height: 300px;
     margin: 50px 0;

@@ -49,7 +49,7 @@ public class BoardController {
     // 페이징 ajax (total 갯수 구하기)
     @ResponseBody
     @RequestMapping(value = "/board/boardList/paging", method = RequestMethod.POST)
-    public int  paging(@ModelAttribute BoardDto boardDto) throws Exception {
+    public int paging(@ModelAttribute BoardDto boardDto) throws Exception {
 
         int result = 0;
 
@@ -151,14 +151,20 @@ public class BoardController {
     }
 
     // 후기 추가
-    @RequestMapping(value = "board/updateReview/{seq}", method = RequestMethod.POST)
-    public String updateReview(@PathVariable("seq") int seq, BoardDto boardDto) {
+    @ResponseBody
+    @RequestMapping(value = "board/boardDetail/updateReview", method = RequestMethod.POST)
+    public int updateReview(@ModelAttribute BoardDto boardDto) {
+
+        int result = 0; // 0:실패 1: 성공
+
         try {
             boardService.updateReview(boardDto);
+            result = 1;
         } catch (Exception e) {
             System.out.println("BoardController 후기 등록 로직 실행 중 error : " + e.getMessage());
         }
-        return "redirect:/board/boardDetail/" + seq;
+
+        return result;
     }
 
     // 댓글 추가
