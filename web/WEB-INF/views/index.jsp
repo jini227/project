@@ -11,14 +11,14 @@
 <head>
     <script src="https://kit.fontawesome.com/2d323a629b.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../resources/css/style.css">
-    <script src="../resources/script/script.js" defer></script>
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <script src="/resources/script/script.js" defer></script>
     <link rel="shortcut icon" href="#">
     <title>:: MAIN ::</title>
 </head>
 <body>
 
-<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/include/header.jsp" flush="false"/>
 
 <section class="section mainSection">
 
@@ -70,7 +70,7 @@
                         <c:forEach var="l" items="${losts}" begin="0" end="4" step="1">
                             <li>
                                 <button class="mainLostImgLi" name="more" id="more" onclick="location='<c:url value="/board/boardDetail/${l.seq}"/>'">
-                                    <img src="./resources/imgUpload/${l.thumbnail_file_name}" alt="사진">
+                                    <img src="/resources/imgUpload/${l.thumbnail_file_name}" alt="사진">
                                     <span class="mainLostImgLiContents">
 										<p>
 											<br>
@@ -86,7 +86,7 @@
                         <c:forEach var="l" items="${losts}" begin="5" end="9" step="1">
                             <li>
                                 <button class="mainLostImgLi" name="more" id="more" onclick="location='<c:url value="/board/boardDetail/${l.seq}"/>'">
-                                    <img src="./resources/imgUpload/${l.thumbnail_file_name}" alt="사진">
+                                    <img src="/resources/imgUpload/${l.thumbnail_file_name}" alt="사진">
                                     <span class="mainLostImgLiContents">
 										<p>
 											<br>
@@ -116,7 +116,7 @@
                         <c:forEach var="r" items="${reviews}">
                             <li>
                                 <button class="mainLostImgLi" name="more" id="more" onclick="location='<c:url value="/board/boardDetail/${r.seq}"/>'">
-                                    <img src="./resources/imgUpload/${r.thumbnail_file_name}" alt="사진">
+                                    <img src="/resources/imgUpload/${r.thumbnail_file_name}" alt="사진">
                                     <span class="mainLostImgLiContents">
 										<p>
 											<br>

@@ -10,13 +10,14 @@
 <html>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../../resources/css/style.css">
-    <script src="../../resources/script/script.js" defer></script>
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <script src="/resources/script/script.js" defer></script>
     <link rel="shortcut icon" href="#">
     <title>회원가입</title>
 </head>
 <body>
-<jsp:include page="../include/header.jsp"/>
+<jsp:include page="/WEB-INF/views/include/header.jsp" flush="false"/>
+
 <section class="sectionSignUp">
     <div class="signUpInner">
         <h3 class="signUpTitle">회원가입</h3>

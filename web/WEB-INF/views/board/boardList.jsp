@@ -12,14 +12,13 @@
 <head>
     <script src="https://kit.fontawesome.com/2d323a629b.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../../resources/css/style.css">
-    <script src="../../resources/script/script.js" defer></script>
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <script src="/resources/script/script.js" defer></script>
     <link rel="shortcut icon" href="#">
     <title>${contentsType}</title>
 </head>
 <body>
-
-<jsp:include page="/WEB-INF/views/include/header.jsp"/>
+<jsp:include page="/WEB-INF/views/include/header.jsp" flush="false"/>
 
 <div class="wrapboardPage">
     <div id="contentsTitle">
@@ -182,7 +181,7 @@
                         output += "<li>" + "<a href='/board/boardDetail/" + posts[i].seq + "'>";
                         output += "<div class='post-photo-top'>";
                         output += "<div class='img_box'>";
-                        output += "<img src='../../resources/imgUpload/" + posts[i].thumbnail_file_name + "' width='200' height='250'/>";
+                        output += "<img src='/imgUpload/" + posts[i].thumbnail_file_name + "' width='200' height='250'/>";
                         output += "</div>";
                         output += "</div>";
                         output += "<div class='post-contents-bottom'> ";

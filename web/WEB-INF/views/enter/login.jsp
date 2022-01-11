@@ -10,13 +10,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <link rel="stylesheet" href="../../resources/css/style.css">
-    <script src="../../resources/script/script.js" defer></script>
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <script src="/resources/script/script.js" defer></script>
     <link rel="shortcut icon" href="#">
     <title>로그인</title>
 </head>
 <body>
-<jsp:include page="../include/header.jsp" />
+<jsp:include page="/WEB-INF/views/include/header.jsp" flush="false"/>
+
 <section class="sectionLogin">
     <div class="loginInner">
         <h3 class="loginTitle"><!-- 로그인 --></h3>

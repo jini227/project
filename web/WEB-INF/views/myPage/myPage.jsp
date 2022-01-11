@@ -11,12 +11,14 @@
 <head>
     <script src="https://kit.fontawesome.com/2d323a629b.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../../resources/css/style.css">
-    <script src="../../resources/script/script.js" defer></script>
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <script src="/resources/script/script.js" defer></script>
+    <link rel="shortcut icon" href="#">
     <title>마이페이지</title>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/include/header.jsp"/>
+<jsp:include page="/WEB-INF/views/include/header.jsp" flush="false"/>
+
 <section class="myPage">
 
     <h1>마이페이지</h1>

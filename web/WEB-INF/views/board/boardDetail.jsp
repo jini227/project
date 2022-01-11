@@ -11,13 +11,13 @@
 <head>
     <script src="https://kit.fontawesome.com/2d323a629b.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../../resources/css/style.css">
-    <script src="../../resources/script/script.js" defer></script>
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <script src="/resources/script/script.js" defer></script>
     <link rel="shortcut icon" href="#">
     <title>${detail.title}</title>
 </head>
 <body>
-<jsp:include page="../include/header.jsp"/>
+<jsp:include page="/WEB-INF/views/include/header.jsp" flush="false"/>
 
 <div class="wrapboardPage">
 
@@ -32,12 +32,12 @@
             <ul>
                 <c:if test="${empty detail.images}">
                     <li class="post-photo-top">
-                        <img src="../../resources/img/defaultImg.png" style="cursor:pointer"/>
+                        <img src="/resources/img/defaultImg.png" style="cursor:pointer"/>
                     </li>
                 </c:if>
                 <c:forEach var="i" items="${detail.images}">
                     <li class="post-photo-top">
-                        <img src="../../resources/imgUpload/${i.stored_file_name}" style="cursor:pointer"/>
+                        <img src="/imgUpload/${i.stored_file_name}" style="cursor:pointer"/>
                     </li>
                 </c:forEach>
             </ul>
